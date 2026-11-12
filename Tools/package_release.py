@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ROOT_FILES = {"Package.swift", "README.md", "README.zh-Hans.md", "LICENSE", "NOTICE.md", "CONTRIBUTING.md", ".gitignore", "llms.txt"}
 DIRS = {"Sources", "Tests", "Example", "Tools", ".github"}
 DOCS = {"IMPLEMENTATION.md", "IMPLEMENTATION.zh-Hans.md", "MEASUREMENT.md", "VALIDATION.md", "SHOWCASE.md"}
-PUBLIC_MEDIA = {"docs/media/scroll.gif", "docs/media/keyboard.gif", "docs/media/provenance.json"}
+PUBLIC_MEDIA = {"docs/media/scroll.gif", "docs/media/keyboard.gif", "docs/media/provenance.json", "docs/media/demo.mp4"}
 EXCLUDED_PARTS = {".build", ".swiftpm", ".git", "xcuserdata", "__pycache__", "DerivedData", ".DS_Store"}
 EXCLUDED_SUFFIXES = {".xcuserstate", ".mobileprovision", ".p12", ".ipa", ".mov", ".mp4", ".raw", ".pyc"}
 
@@ -20,7 +20,7 @@ def sources():
         relative = path.relative_to(ROOT)
         if any(part in EXCLUDED_PARTS for part in relative.parts) or path.is_symlink() or not path.is_file():
             continue
-        if path.suffix in EXCLUDED_SUFFIXES:
+        if path.suffix in EXCLUDED_SUFFIXES and relative.as_posix() not in PUBLIC_MEDIA:
             continue
         if relative.parts[0] in DIRS or relative.as_posix() in ROOT_FILES or relative.as_posix() in PUBLIC_MEDIA or (relative.parts[0] == "docs" and relative.name in DOCS):
             yield path, relative

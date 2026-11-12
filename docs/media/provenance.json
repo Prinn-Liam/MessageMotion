@@ -1,28 +1,52 @@
 {
   "recorded_on": "2026-11-11",
-  "application": "MessageMotionDemo",
-  "device": "iPhone 18 Pro Simulator",
-  "system": "iOS 27.2",
-  "data": "Local in-memory example fixtures. No production accounts or Apple Messages footage.",
-  "edits": "Trim, timestamp normalization, frame-rate conversion, scaling and palette compression. No retiming, frame interpolation, replacement UI or synthetic motion.",
+  "application": "MessageMotion example in a local sandbox host",
+  "source": "Owner-provided physical iPhone screen recording",
+  "source_sha256": "497f593be5722a36c604e6e4e5fde2b4b10a7712d596d08af3cdb9735eedbb2f",
+  "source_dimensions": [
+    1320,
+    2868
+  ],
+  "source_duration_seconds": 7.216667,
+  "crop_pixels": {
+    "x": 0,
+    "y": 320,
+    "width": 1320,
+    "height": 2548
+  },
+  "crop_reason": "Remove only system status and host back-navigation UI; retain the component header, transcript, composer and keyboard.",
+  "data": "Local in-memory example fixtures; no Apple Messages footage or production conversations.",
+  "speed": 1,
+  "audio": "removed",
+  "source_metadata": "not copied",
+  "edits": "Crop, trim, timestamp normalization, scaling, frame-rate quantization and GIF palette compression. No speed changes, synthetic interpolation, replaced UI or simulated gestures.",
+  "distributed_media": [
+    "scroll.gif",
+    "keyboard.gif",
+    "demo.mp4"
+  ],
+  "full_video": {
+    "file": "demo.mp4",
+    "fps": 60,
+    "dimensions": [
+      660,
+      1274
+    ],
+    "silent": true
+  },
+  "gif_fps": 50,
+  "gif_width": 320,
+  "endpoint_note": "CFR/GIF endpoint quantization may vary a clip boundary by one frame; gesture playback is not retimed.",
   "clips": [
     {
-      "demo": "scroll",
-      "source_sha256": "e969c77e7d456933baffc47fef3106c8eb63b70bc5d35983ad57688604c9d5ab",
-      "source_start_seconds": 1.6,
-      "source_duration_seconds": 4.6,
-      "speed": 1,
-      "mp4_fps": 30,
-      "gif_fps": 25
+      "demo": "keyboard",
+      "source_start_seconds": 1.35,
+      "source_end_seconds": 3.1
     },
     {
-      "demo": "keyboard",
-      "source_sha256": "d08531fb00891b9c4b799a26b24198f0a5d98aed93a868f245b42448fed8c232",
-      "source_start_seconds": 5.6,
-      "source_duration_seconds": 6.7,
-      "speed": 1,
-      "mp4_fps": 30,
-      "gif_fps": 25
+      "demo": "scroll",
+      "source_start_seconds": 3.1,
+      "source_end_seconds": 7.216667
     }
   ]
 }

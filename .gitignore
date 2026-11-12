@@ -12,3 +12,4 @@ DerivedData/
 *.raw
 __pycache__/
 *.pyc
+!docs/media/demo.mp4

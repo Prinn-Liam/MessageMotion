@@ -16,11 +16,11 @@ SwiftUI component for **Apple Messages / iMessage-style bubble scrolling**, usin
 
 ## Demo
 
-| Bubble scrolling | Keyboard and return to latest |
+| Quick flicks and touch stops | Keyboard and return to latest |
 |---|---|
-| <img src="docs/media/scroll.gif" width="280" alt="MessageMotion example: message bubble spacing changes during a drag and settles after release"> | <img src="docs/media/keyboard.gif" width="280" alt="MessageMotion example: focusing the composer returns from history to the latest message, followed by keyboard dismissal"> |
+| <img src="docs/media/scroll.gif" width="280" alt="Physical iPhone recording: fast flicks interrupted by touch, with bubble spacing settling afterwards"> | <img src="docs/media/keyboard.gif" width="280" alt="Physical iPhone recording: keyboard opening and dismissal coordinated with return to the latest message"> |
 
-Normal-speed recordings of this package's iPhone Simulator example with local sample data, not recordings of Apple Messages. [Capture details](docs/SHOWCASE.md#demo-provenance).
+Original-speed physical iPhone recording supplied by the project owner, showing the component example with local sample data. GIF previews loop at 50 fps. [Download the full silent recording (60 fps MP4)](https://raw.githubusercontent.com/Prinn-Liam/MessageMotion/main/docs/media/demo.mp4). These are not recordings of Apple Messages. [Capture details](docs/SHOWCASE.md#demo-provenance).
 
 ## Supported behavior
 

@@ -16,11 +16,11 @@
 
 ## 演示
 
-| 气泡滚动与间距归位 | 键盘与回到最新消息 |
+| 快划、点住即停 | 键盘与回到最新消息 |
 |---|---|
-| <img src="docs/media/scroll.gif" width="280" alt="MessageMotion 示例：拖动时气泡间距变化，松手后原生弹簧恢复间距"> | <img src="docs/media/keyboard.gif" width="280" alt="MessageMotion 示例：从历史消息点击输入框回到最新消息，再收起键盘"> |
+| <img src="docs/media/scroll.gif" width="280" alt="真机录屏：连续快划、点住停止，气泡剩余间距继续归位"> | <img src="docs/media/keyboard.gif" width="280" alt="真机录屏：键盘开合与返回最新消息时的列表联动"> |
 
-录自本组件的 iPhone 模拟器示例，使用本地演示消息并按原速播放；不是 Apple Messages 的录屏。[素材说明](docs/SHOWCASE.md#demo-provenance)。
+由项目拥有者在真实 iPhone 上录制，展示手机沙盒中承载的本组件示例，使用本地演示消息。前段为键盘开合与最新消息位置联动，后段为连续快划快停。GIF 按原速以 50 fps 循环播放；[下载完整静音录屏（60 fps MP4）](https://raw.githubusercontent.com/Prinn-Liam/MessageMotion/main/docs/media/demo.mp4)。不是 Apple Messages 的录屏。[素材说明](docs/SHOWCASE.md#demo-provenance)。
 
 ## 已实现
 

@@ -19,14 +19,25 @@ The first README paragraph states the use case; tables identify requirements and
 
 ## Demo provenance
 
-`docs/media/scroll.gif` and `docs/media/keyboard.gif` were recorded from MessageMotionDemo, iPhone 18 Pro Simulator, iOS 27.2, on 2026-11-11. Both use in-memory sample messages and normal-speed source timing. They are not Apple Messages recordings and contain no production account or private business data.
+The current demos come from a physical iPhone screen recording supplied by the project owner on 2026-11-11. It shows the MessageMotion example views hosted in the local sandbox, using in-memory sample messages. It is not Apple Messages footage. No production conversations, original audio or source recording metadata are distributed.
 
-- Scrolling: drag and spring-spacing recovery; this clip does not separately measure fast-touch interruption latency.
-- Keyboard: focus from history, return to latest, then use the example's keyboard-dismiss button. This clip does not demonstrate interactive finger-following dismissal.
+The source presents 433 decoded frames over approximately 7.2167 seconds. Frame timestamps are consistently about 16.7 ms apart, with no interval above 50 ms. The header's stored frame count differs from the decoded presentation count because of container/edit-list metadata; use decoded timestamps when evaluating pacing. This replaces the earlier Simulator capture that contained long frame gaps during motion.
 
-GIFs are 360×782, 25 fps, infinitely looped. Edits are trim, timestamp normalization, scaling, frame-rate conversion and palette compression. No speed multiplier, synthetic bubble motion, frame interpolation or replacement UI was used. Source hashes and trim intervals are in `docs/media/provenance.json`; raw recordings are not distributed.
+- `docs/media/demo.mp4`: the complete sequence at 1× speed, H.264, 660×1274, 60 fps, silent, fast-start. It includes the initial history movement, composer focus/return to latest, keyboard dismissal with synchronized list adjustment, and repeated quick flicks/touch stops.
+- `docs/media/keyboard.gif`: source interval 1.35–3.10 seconds, covering keyboard coordination and latest-message positioning.
+- `docs/media/scroll.gif`: source interval 3.10–7.216667 seconds, covering repeated quick flicks and touch stops.
 
-`Tools/make_showcase_media.py` encodes reviewed raw captures using optional maintainer tool ffmpeg. Intermediate MP4s are temporary; only GIFs and provenance are distributed. Update its trim intervals for different source takes. The existing GIF bytes were preserved when removing the website.
+GIFs are 320×618 at 50 fps and loop. GIF playback is a preview; use the full MP4 or the app to inspect finer motion. Clip endpoints can differ by one frame due to timing quantization. No playback-speed change, optical-flow interpolation, synthetic bubble motion or replacement UI was used.
+
+Only the top 320 source pixels were cropped: system status and host back-navigation UI. The component header, transcript, composer and keyboard remain visible. Source dimensions, hash, crop and clip intervals are in `docs/media/provenance.json`; the original MOV remains local and unchanged.
+
+Re-encode the reviewed capture with optional maintainer tools ffmpeg/ffprobe:
+
+```sh
+python3 Tools/make_showcase_media.py --source /path/to/reviewed-iphone-recording.MOV
+```
+
+This is an edit recipe for this specific 1320×2868 capture. Review its crop and intervals before using a different recording. It strips audio and recording metadata, writes the full MP4 and two GIFs, and updates provenance. The source archive includes only these intentionally public assets, not arbitrary MOV/MP4 files.
 
 ## Scope and checks
 

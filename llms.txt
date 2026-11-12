@@ -5,6 +5,7 @@
 Repository: https://github.com/Prinn-Liam/MessageMotion
 
 - [Features, limits, demo GIFs and integration](README.md)
+- [Full real-iPhone demonstration (silent 60 fps MP4)](docs/media/demo.mp4)
 - [中文介绍](README.zh-Hans.md)
 - [Implementation and event ownership](docs/IMPLEMENTATION.md)
 - [Validation](docs/VALIDATION.md)
