@@ -1,0 +1,19 @@
+name: Test
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Core tests
+        run: swift test
+      - name: Measurement helper tests
+        run: python3 -m unittest discover -s Tools -p 'test_measure.py'
+      - name: Select available iPhone Simulator
+        run: |
+          MOTION_SIMULATOR=$(xcrun simctl list devices available --json | python3 -c 'import json,sys; d=json.load(sys.stdin); print(next(x["udid"] for a in d["devices"].values() for x in a if x.get("isAvailable") and "iPhone" in x["name"]))')
+          echo "MOTION_SIMULATOR=$MOTION_SIMULATOR" >> "$GITHUB_ENV"
+      - name: Native iOS tests
+        run: xcodebuild -project Example/MessageMotionDemo.xcodeproj -scheme MessageMotionDemo -destination "platform=iOS Simulator,id=$MOTION_SIMULATOR" test CODE_SIGNING_ALLOWED=NO

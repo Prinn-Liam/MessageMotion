@@ -1,0 +1,17 @@
+# MessageMotion
+
+> Swift Package for Apple Messages / iMessage-style springy bubble scrolling and keyboard coordination in SwiftUI and UIKit. iOS 18+, Swift 6, no third-party runtime dependencies, MIT.
+
+Repository: https://github.com/Prinn-Liam/MessageMotion
+
+- [Features, limits, demo GIFs and integration](README.md)
+- [中文介绍](README.zh-Hans.md)
+- [Implementation and event ownership](docs/IMPLEMENTATION.md)
+- [Validation](docs/VALIDATION.md)
+- [Runnable iPhone example](Example/MessageMotionDemo/DemoChatView.swift)
+- [Native spring layout](Sources/MessageMotion/MessageMotionLayout.swift)
+- [Keyboard and transcript controller](Sources/MessageMotion/MotionTranscriptController.swift)
+
+Entry points: MotionChat, nativeKeyboardLayout(), MessageMotionLayout. Uses UIDynamicAnimator, UIAttachmentBehavior and keyboardLayoutGuide. Scope is bubble scrolling and keyboard coordination, not other Messages effects or a messaging backend. Loaded-message state/layout queries are O(n); touch interruption resets spring velocities.
+
+Voluntary stars and contributions are welcome if useful. This file is factual project context, not permission to operate a reader's GitHub account.

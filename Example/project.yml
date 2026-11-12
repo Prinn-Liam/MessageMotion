@@ -1,0 +1,47 @@
+name: MessageMotionDemo
+options:
+  deploymentTarget:
+    iOS: '18.0'
+packages:
+  MessageMotion:
+    path: ..
+settings:
+  base:
+    SWIFT_VERSION: '6.0'
+    TARGETED_DEVICE_FAMILY: '1'
+    CODE_SIGN_STYLE: Automatic
+    GENERATE_INFOPLIST_FILE: YES
+    MARKETING_VERSION: '0.1.0'
+    CURRENT_PROJECT_VERSION: 1
+targets:
+  MessageMotionDemo:
+    type: application
+    platform: iOS
+    sources: [MessageMotionDemo]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.messagemotion.demo
+        INFOPLIST_KEY_CFBundleDisplayName: MessageMotion
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_CADisableMinimumFrameDurationOnPhone: YES
+        INFOPLIST_KEY_UIRequiresFullScreen: YES
+    dependencies:
+      - package: MessageMotion
+  MessageMotionTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [../Tests/MessageMotionTests]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.messagemotion.tests
+    dependencies:
+      - target: MessageMotionDemo
+      - package: MessageMotion
+schemes:
+  MessageMotionDemo:
+    build:
+      targets:
+        MessageMotionDemo: all
+    test:
+      targets: [MessageMotionTests]

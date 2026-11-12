@@ -1,0 +1,28 @@
+{
+  "recorded_on": "2026-11-11",
+  "application": "MessageMotionDemo",
+  "device": "iPhone 18 Pro Simulator",
+  "system": "iOS 27.2",
+  "data": "Local in-memory example fixtures. No production accounts or Apple Messages footage.",
+  "edits": "Trim, timestamp normalization, frame-rate conversion, scaling and palette compression. No retiming, frame interpolation, replacement UI or synthetic motion.",
+  "clips": [
+    {
+      "demo": "scroll",
+      "source_sha256": "e969c77e7d456933baffc47fef3106c8eb63b70bc5d35983ad57688604c9d5ab",
+      "source_start_seconds": 1.6,
+      "source_duration_seconds": 4.6,
+      "speed": 1,
+      "mp4_fps": 30,
+      "gif_fps": 25
+    },
+    {
+      "demo": "keyboard",
+      "source_sha256": "d08531fb00891b9c4b799a26b24198f0a5d98aed93a868f245b42448fed8c232",
+      "source_start_seconds": 5.6,
+      "source_duration_seconds": 6.7,
+      "speed": 1,
+      "mp4_fps": 30,
+      "gif_fps": 25
+    }
+  ]
+}

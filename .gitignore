@@ -1,0 +1,14 @@
+.build/
+.swiftpm/
+DerivedData/
+**/xcuserdata/
+*.xcuserstate
+.DS_Store
+*.ipa
+*.mobileprovision
+*.p12
+*.mov
+*.mp4
+*.raw
+__pycache__/
+*.pyc

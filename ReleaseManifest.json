@@ -1,0 +1,164 @@
+{
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "f52e78cea29bb050031fb4e891a863c07563136d05b4def5d74bbc62b720868c"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "3bd218df20399c96935e0c5f6979978105da1246a83b68f07dd754b33ecb19a8"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "ff9afb29d52bb9f3c34e76a4ce5eb0ce0c0e5a38276d3bf2294530428622751e"
+    },
+    {
+      "path": "Example/MessageMotionDemo/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
+      "sha256": "21732f7fb04677779d5167292f05a21ca0343c320fe98ac86456f7bea9e224cc"
+    },
+    {
+      "path": "Example/MessageMotionDemo/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "sha256": "852920cb36e95beb53771138a4b8195a16fcce1cc31250632f246081cc638f9a"
+    },
+    {
+      "path": "Example/MessageMotionDemo/Assets.xcassets/Contents.json",
+      "sha256": "f5fb0e1f3a8142892ed092efb5955c1c2cc537003a89ad7bbdb9dade7fe8985f"
+    },
+    {
+      "path": "Example/MessageMotionDemo/DemoChatView.swift",
+      "sha256": "d9efb2ce3a1932f6a73cb8149a41c61510112968843fad9b958532316eb33205"
+    },
+    {
+      "path": "Example/MessageMotionDemo/MessageMotionDemoApp.swift",
+      "sha256": "4491c5c949b3bc36801807fd1e9ccde7bc32c2676a6f8cb5feb4131e40aeb420"
+    },
+    {
+      "path": "Example/MessageMotionDemo/MotionSettingsView.swift",
+      "sha256": "b0dfffb4d3021f68ade6d4090bb7fbcbe82ba2ab5a97b3b9818d78600b936abd"
+    },
+    {
+      "path": "Example/MessageMotionDemo.xcodeproj/project.pbxproj",
+      "sha256": "70d64a35a809bd236b62c47c58dfac42f341d6d8bf95b4a7cba68b5346934f9d"
+    },
+    {
+      "path": "Example/MessageMotionDemo.xcodeproj/project.xcworkspace/contents.xcworkspacedata",
+      "sha256": "7f3b00b5c3fdb45242d7b87e1e5c4e25d1fa8129a16c94295ecc4e8ea2235c5f"
+    },
+    {
+      "path": "Example/MessageMotionDemo.xcodeproj/xcshareddata/xcschemes/MessageMotionDemo.xcscheme",
+      "sha256": "bcf5358b733830615200387f271cc36ac690db18022a33c22548f523c515b15e"
+    },
+    {
+      "path": "Example/project.yml",
+      "sha256": "f363913872cf604f2250c129979c23d7f79d61aa4a90a39bf3d7f7a98f6537f8"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "299b7505f91ff7ac5fd3f91efabc330559300adca0dd3aec4e4645c0dbad87ca"
+    },
+    {
+      "path": "NOTICE.md",
+      "sha256": "54b6a26ce58cfcbc222fd947ec6986914021306885fb1ea73229968d209dadb1"
+    },
+    {
+      "path": "Package.swift",
+      "sha256": "1a6f4c1942be72d75fd456c63314d007c57ba1dc82dea7f498120fa63cebd8ba"
+    },
+    {
+      "path": "README.md",
+      "sha256": "8297d92ebf82eb5c4b424a1bf0125a2ee8ab6ab5080d19f0f1cae16531bd798d"
+    },
+    {
+      "path": "README.zh-Hans.md",
+      "sha256": "3acbabd8c6999f81ef4b2551fbab3da13e2d7e7380305a584767fa9c81b3ca6a"
+    },
+    {
+      "path": "Sources/MessageMotion/MessageMotionLayout.swift",
+      "sha256": "8b9ff3bd7d31bef81d5d109ff94c34f117456d8552a58135f6a0b7ef60812f5b"
+    },
+    {
+      "path": "Sources/MessageMotion/MotionChat.swift",
+      "sha256": "0a09a5be22393867705a696a05e91909eb7c633c99edc0b778e55abb33c82b92"
+    },
+    {
+      "path": "Sources/MessageMotion/MotionConfiguration.swift",
+      "sha256": "01fffb3c729a9f895165006278db1dd2363b6e291468aa2ed31ccb01733fff49"
+    },
+    {
+      "path": "Sources/MessageMotion/MotionGeometry.swift",
+      "sha256": "9cb090707a41e7b9a15b44122667cb68b05dfc3019706024ef344b5288f1b357"
+    },
+    {
+      "path": "Sources/MessageMotion/MotionTranscriptController.swift",
+      "sha256": "523b5518a599c67cfb9b40a4e5898c3358a1b3b7f613866926745f252e9c6053"
+    },
+    {
+      "path": "Sources/MessageMotion/ReturnToLatestDriver.swift",
+      "sha256": "b1398d862a1c340f569b404225734f5ded82c5a8c80c84e1dd6599cd5ed76684"
+    },
+    {
+      "path": "Tests/MessageMotionTests/MotionGeometryTests.swift",
+      "sha256": "b9b2eaebd184e702931d88c56ba94d3d818b184b9db283b75414825f50ef1e97"
+    },
+    {
+      "path": "Tests/MessageMotionTests/NativeLayoutTests.swift",
+      "sha256": "5beee70eb195681776be8843a29c73a296798aa690375c36fa51d410917e52e7"
+    },
+    {
+      "path": "Tests/MessageMotionTests/ReturnScrollTests.swift",
+      "sha256": "2c321ed56aa8e1fa4fca0b0861f0fe98f8777865ed114ea268014116dbc3ced4"
+    },
+    {
+      "path": "Tools/make_showcase_media.py",
+      "sha256": "77d931e0bba653b5c7b9b333b0eecb4f3e454b3ed64d2a09e407c7565805b369"
+    },
+    {
+      "path": "Tools/measure_motion.py",
+      "sha256": "8ac949463247ff03e380af17cb02aee758b6442bf283f597c7275dc4af7d8294"
+    },
+    {
+      "path": "Tools/package_release.py",
+      "sha256": "4a2417f0b68582cb21bd9d10731f5ccf2a2f22dce5b3f2d7457896e30db324ba"
+    },
+    {
+      "path": "Tools/test_measure.py",
+      "sha256": "91742355fb3141e6461eb5ec70197e5879bd5f190934e7cb5f5295e33f997fca"
+    },
+    {
+      "path": "docs/IMPLEMENTATION.md",
+      "sha256": "829dba7d0bbd33bb153ddfe70596877a908edd64aadce74b40f0306976c4ffed"
+    },
+    {
+      "path": "docs/IMPLEMENTATION.zh-Hans.md",
+      "sha256": "ad6f3bfae3199f2ccd2cc63ea2b616ada25d41255d218714c918ec510bc34580"
+    },
+    {
+      "path": "docs/MEASUREMENT.md",
+      "sha256": "9d4eaab8b520a5c29b47283e23dcb9046a7dfffb79866395e0420db0e9c1da9a"
+    },
+    {
+      "path": "docs/SHOWCASE.md",
+      "sha256": "9a890eab51e46011b01738c672d6bd6db36dccf03ee1bc9beb91ca29cfd782cc"
+    },
+    {
+      "path": "docs/VALIDATION.md",
+      "sha256": "322322aa9fa490fcaabd61931f91307a9faa2abaea7172c29a26810645add3ee"
+    },
+    {
+      "path": "docs/media/keyboard.gif",
+      "sha256": "d59590418e6ddf9d1ebf648f5ca81d77b862c34f03a06c9fd30090b65a2dd018"
+    },
+    {
+      "path": "docs/media/provenance.json",
+      "sha256": "3aa264b6b20cecb22e939fee70f8ca457f111e124926fd2cffb4b4a8f44255fa"
+    },
+    {
+      "path": "docs/media/scroll.gif",
+      "sha256": "9de8aa7dfc0baf82502c669e1bfdd728dc7de38b235093614b4c231f7dda12df"
+    },
+    {
+      "path": "llms.txt",
+      "sha256": "9b868bf7271826580faa831121a28906dc7fd16f58adf8d7d6624e644d3758b2"
+    }
+  ]
+}
