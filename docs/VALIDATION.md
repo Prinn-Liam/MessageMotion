@@ -1,5 +1,20 @@
 # Validation record
 
+## 2026-11-12: slow-drag refinement and preset update
+
+The current layout keeps continuous `UIDynamicItem` state separate from display attributes and uses nonzero-length native attachments. Defaults are frequency 4.5 Hz, damping 0.7, drag strength 1.5, minimum gap ratio 0.6, normal gap 16 pt and deceleration deformation enabled. No input threshold or custom spring solver was added.
+
+Focused checks on the public checkout (Xcode 27.2, iPhone 18 Pro Max Simulator, iOS 27.2):
+
+- macOS core: 8 tests passed, including default/partial-JSON/nonfinite-value consistency.
+- Native layout: 6 tests passed. Covers steady subpixel input in both directions and natural settling, large-input minimum gaps, displayed-cell positions, animated visibility, touch continuity, height changes and Reduce Motion.
+- The subpixel test samples native display frames and requires at least 60 uninterrupted steady samples after warmup; missed frames restart warmup rather than being treated as continuous input. This is test synchronization, not runtime filtering.
+- Portable source export and whitespace checks passed. No full application suite or new visual interaction run was performed for this publication.
+
+The owner previously tested the refined demo on a physical iPhone and reported improved slow dragging, then selected the current parameters. That observation is distinct from the automated public-checkout checks above. The existing demo videos predate this update and do not demonstrate the new tuning. The original extraction evidence below is historical.
+
+## Original extraction (2026-11-11)
+
 Date:2026-11-11. Local toolchain: Xcode27.2 (27B52), Swift6.4.2. Example minimum deployment: iOS18. Simulator: iPhone18Pro, iOS27.2. This records the independent extraction, not every device supported by the deployment target.
 
 ## Automated checks completed

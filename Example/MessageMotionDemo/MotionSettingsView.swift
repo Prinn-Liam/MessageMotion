@@ -29,7 +29,7 @@ struct MotionSettingsView: View {
                         .font(.caption).foregroundStyle(.secondary)
                 }
                 Section {
-                    Button("Reset starting preset") { configuration = .messagesLike }
+                    Button("Reset default preset") { configuration = .messagesLike }
                         .accessibilityIdentifier("demo.resetPreset")
                     Button("Copy configuration") {
                         let encoder = JSONEncoder()

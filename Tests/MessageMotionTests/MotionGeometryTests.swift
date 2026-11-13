@@ -81,6 +81,11 @@ final class MotionGeometryTests: XCTestCase {
         let decoded = try JSONDecoder().decode(MotionConfiguration.self, from: Data("{\"minimumGapRatio\":0.8}".utf8))
         XCTAssertEqual(decoded.minimumGapRatio, 0.8)
         XCTAssertEqual(decoded.frequency, 4.5)
+        XCTAssertEqual(decoded.damping, 0.7)
+        XCTAssertEqual(decoded.dragStrength, 1.5)
+        XCTAssertEqual(MotionConfiguration.messagesLike, MotionConfiguration())
+        XCTAssertEqual(MotionConfiguration(damping: .nan, dragStrength: .nan).normalized,
+                       MotionConfiguration.messagesLike)
         XCTAssertTrue(decoded.deformsDuringDeceleration)
         var bad = MotionConfiguration()
         bad.frequency = .nan

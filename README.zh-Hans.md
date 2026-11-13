@@ -20,7 +20,7 @@
 |---|---|
 | <img src="docs/media/scroll.gif" width="280" alt="真机录屏：连续快划、点住停止，气泡剩余间距继续归位"> | <img src="docs/media/keyboard.gif" width="280" alt="真机录屏：键盘开合与返回最新消息时的列表联动"> |
 
-由项目拥有者在真实 iPhone 上录制，展示手机沙盒中承载的本组件示例，使用本地演示消息。前段为键盘开合与最新消息位置联动，后段为连续快划快停。GIF 按原速以 50 fps 循环播放；[下载完整静音录屏（60 fps MP4）](https://raw.githubusercontent.com/Prinn-Liam/MessageMotion/main/docs/media/demo.mp4)。不是 Apple Messages 的录屏。[素材说明](docs/SHOWCASE.md#demo-provenance)。
+由项目拥有者在真实 iPhone 上录制，展示手机沙盒中承载的本组件示例，使用本地演示消息。前段为键盘开合与最新消息位置联动，后段为连续快划快停。GIF 按原速以 50 fps 循环播放；[下载完整静音录屏（60 fps MP4）](https://raw.githubusercontent.com/Prinn-Liam/MessageMotion/main/docs/media/demo.mp4)。素材录制于本次慢拖优化及默认参数更新之前，不是 Apple Messages 的录屏。[素材说明](docs/SHOWCASE.md#demo-provenance)。
 
 ## 已实现
 
@@ -66,18 +66,20 @@ MotionChat(messages: messages, isComposing: focused,
 
 ## 原理与默认值
 
-`MessageMotionLayout` 使用 `UIDynamicAnimator`，为每个气泡建立一个锚定在静止位置的 `UIAttachmentBehavior`。滚动位移根据到触点的距离权重作用于弹簧，另行约束最小可见间距，并根据动画后的 frame 判断可见单元。没有额外速度补偿或自定义弹簧求解器。
+`MessageMotionLayout` 使用 `UIDynamicAnimator`，为每个气泡建立独立 `UIAttachmentBehavior`。连续物理对象保存亚像素位置，layout attributes 仅用于显示；非零长度 attachment 避免实测中零长度弹簧在锚点附近的不稳定。滚动位移根据到触点的距离权重作用于弹簧，另行约束最小可见间距，并根据动画后的 frame 判断可见单元。没有额外速度补偿或自定义弹簧求解器。
 
 `keyboardLayoutGuide` 管理键盘几何；可取消的 display link 经过实际中间消息返回最新位置。仅视口高度变化时，避免触发 collection view 布局过渡。
 
 | 参数 | 默认值 |
 |---|---:|
 | `frequency` | 4.5 Hz |
-| `damping` | 1.0 |
-| `dragStrength` | 0.65 |
+| `damping` | 0.7 |
+| `dragStrength` | 1.5 |
 | `normalGap` | 16 pt |
 | `minimumGapRatio` | 0.6 |
 | `deformsDuringDeceleration` | true |
+
+初始化、`.messagesLike`、缺省 JSON 字段和示例重置均使用上述参数。需要保留旧系数时显式设置 `damping: 1, dragStrength: 0.65`；弹簧实现仍使用本次修复。
 
 ## 限制与验证
 

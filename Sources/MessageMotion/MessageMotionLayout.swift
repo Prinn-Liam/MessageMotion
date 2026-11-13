@@ -17,8 +17,27 @@ public final class MessageMotionLayout: UICollectionViewLayout, UIDynamicAnimato
         didSet { if enabled != oldValue { reset() } }
     }
 
+    // Layout attributes are pixel-quantized when UIKit Dynamics writes them.
+    // Keep the native solver's subpixel state in an ordinary dynamic item, and
+    // create layout attributes only for display (never feed them back as input).
+    private final class SpringItem: NSObject, UIDynamicItem {
+        var center: CGPoint
+        let restingCenter: CGPoint
+        let bounds: CGRect
+        var transform = CGAffineTransform.identity
+        init(frame: CGRect) {
+            center = CGPoint(x: frame.midX, y: frame.midY)
+            restingCenter = center
+            bounds = CGRect(origin: .zero, size: frame.size)
+        }
+        var frame: CGRect {
+            get { CGRect(x: center.x - bounds.width / 2, y: center.y - bounds.height / 2,
+                         width: bounds.width, height: bounds.height) }
+            set { center = CGPoint(x: newValue.midX, y: newValue.midY) }
+        }
+    }
     private struct Spring {
-        let attributes: UICollectionViewLayoutAttributes
+        let item: SpringItem
         let attachment: UIAttachmentBehavior
     }
     private var resting: [UICollectionViewLayoutAttributes] = []
@@ -32,9 +51,8 @@ public final class MessageMotionLayout: UICollectionViewLayout, UIDynamicAnimato
     private var touch = CGPoint.zero
     private var releaseTouchOnScreen = CGPoint.zero
     private lazy var animator = makeAnimator()
-
     private func makeAnimator() -> UIDynamicAnimator {
-        let result = UIDynamicAnimator(collectionViewLayout: self)
+        let result = UIDynamicAnimator()
         result.delegate = self
         return result
     }
@@ -72,19 +90,24 @@ public final class MessageMotionLayout: UICollectionViewLayout, UIDynamicAnimato
             springs.removeLast(springs.count - count)
         }
         for index in springs.count..<count {
-            let item = resting[index].copy() as! UICollectionViewLayoutAttributes
+            let item = SpringItem(frame: resting[index].frame)
             let attachment = makeAttachment(item, anchor: resting[index].center)
-            springs.append(Spring(attributes: item, attachment: attachment))
+            springs.append(Spring(item: item, attachment: attachment))
             animator.addBehavior(attachment)
         }
         installAction()
         updateSpringSettings()
     }
 
-    private func makeAttachment(_ item: UICollectionViewLayoutAttributes, anchor: CGPoint) -> UIAttachmentBehavior {
+    private func makeAttachment(_ item: SpringItem, anchor: CGPoint) -> UIAttachmentBehavior {
         let settings = configuration.normalized
-        let attachment = UIAttachmentBehavior(item: item, attachedToAnchor: anchor)
-        attachment.length = 0
+        // A zero-length attachment loses its restoring direction near its anchor.
+        // Put the anchor above the reachable transcript instead: vertical extension
+        // still equals the bubble's displacement, with the same frequency/damping.
+        let length = max(height, collectionView?.bounds.height ?? 0, 1) * 4
+        let attachment = UIAttachmentBehavior(item: item,
+            attachedToAnchor: CGPoint(x: anchor.x, y: anchor.y - length))
+        attachment.length = length
         attachment.frequency = CGFloat(settings.frequency)
         attachment.damping = CGFloat(settings.damping)
         return attachment
@@ -107,24 +130,27 @@ public final class MessageMotionLayout: UICollectionViewLayout, UIDynamicAnimato
         layoutAttributesForItem(at: itemIndexPath)
     }
 
-    private func projectedFrames(_ items: [UICollectionViewLayoutAttributes]) -> [CGRect] {
-        let anchor = items.indices.min { abs(items[$0].center.y - touch.y) < abs(items[$1].center.y - touch.y) } ?? 0
+    private func projectedFrames(_ frames: [CGRect]) -> [CGRect] {
+        let anchor = frames.indices.min { abs(frames[$0].midY - touch.y) < abs(frames[$1].midY - touch.y) } ?? 0
         let settings = configuration.normalized
-        return MotionGeometry.projectMinimumGap(items.map(\.frame), anchor: anchor,
+        return MotionGeometry.projectMinimumGap(frames, anchor: anchor,
             normalGap: CGFloat(settings.normalGap), minimumRatio: CGFloat(settings.minimumGapRatio))
     }
 
     private func displayedAttributes() -> [UICollectionViewLayoutAttributes] {
-        let items = resting.enumerated().map { index, base in
-            (springs.indices.contains(index) ? springs[index].attributes : base).copy() as! UICollectionViewLayoutAttributes
+        let frames = projectedFrames(resting.enumerated().map { index, base in
+            springs.indices.contains(index) ? springs[index].item.frame : base.frame
+        })
+        return zip(resting, frames).map { base, frame in
+            let attributes = base.copy() as! UICollectionViewLayoutAttributes
+            attributes.frame = frame
+            return attributes
         }
-        for (item, frame) in zip(items, projectedFrames(items)) { item.frame = frame }
-        return items
     }
 
     private func constrainMinimumGap(updateAnimator: Bool) {
-        let items = springs.map(\.attributes)
-        for (item, frame) in zip(items, projectedFrames(items)) where item.frame != frame {
+        let items = springs.map(\.item)
+        for (item, frame) in zip(items, projectedFrames(items.map(\.frame))) where item.frame != frame {
             item.frame = frame
             if updateAnimator { animator.updateItem(usingCurrentState: item) }
         }
@@ -144,7 +170,11 @@ public final class MessageMotionLayout: UICollectionViewLayout, UIDynamicAnimato
 
     private func installAction() {
         guard let first = springs.first, first.attachment.action == nil else { return }
-        first.attachment.action = { [weak self] in self?.constrainMinimumGap(updateAnimator: true) }
+        first.attachment.action = { [weak self] in
+            guard let self else { return }
+            self.constrainMinimumGap(updateAnimator: true)
+            self.invalidateLayout()
+        }
     }
 
     public override func shouldInvalidateLayout(forBoundsChange proposed: CGRect) -> Bool {
@@ -170,12 +200,12 @@ public final class MessageMotionLayout: UICollectionViewLayout, UIDynamicAnimato
             touch = CGPoint(x: releaseTouchOnScreen.x + previous.minX, y: releaseTouchOnScreen.y + previous.minY)
         }
         for spring in springs {
-            spring.attributes.center.y += MotionGeometry.displacement(delta: delta,
-                anchor: spring.attachment.anchorPoint, touch: touch, strength: CGFloat(settings.dragStrength))
+            spring.item.center.y += MotionGeometry.displacement(delta: delta,
+                anchor: spring.item.restingCenter, touch: touch, strength: CGFloat(settings.dragStrength))
         }
         constrainMinimumGap(updateAnimator: false)
-        for spring in springs { animator.updateItem(usingCurrentState: spring.attributes) }
-        // UIDynamicAnimator(collectionViewLayout:) publishes its own layout updates.
+        for spring in springs { animator.updateItem(usingCurrentState: spring.item) }
+        // The native action publishes the continuous positions as layout attributes.
         return false
     }
 
@@ -216,8 +246,8 @@ public final class MessageMotionLayout: UICollectionViewLayout, UIDynamicAnimato
         animator.removeAllBehaviors()
         animator = makeAnimator()
         springs = springs.enumerated().map { index, old in
-            old.attributes.center.y += correction
-            return Spring(attributes: old.attributes, attachment: makeAttachment(old.attributes, anchor: resting[index].center))
+            old.item.center.y += correction
+            return Spring(item: old.item, attachment: makeAttachment(old.item, anchor: resting[index].center))
         }
         rebasing = true
         defer { rebasing = false }
@@ -232,7 +262,7 @@ public final class MessageMotionLayout: UICollectionViewLayout, UIDynamicAnimato
 
     public func dynamicAnimatorDidPause(_ animator: UIDynamicAnimator) {
         guard animator === self.animator else { return }
-        for spring in springs { spring.attributes.center = spring.attachment.anchorPoint }
+        for spring in springs { spring.item.center = spring.item.restingCenter }
         invalidateLayout()
     }
 

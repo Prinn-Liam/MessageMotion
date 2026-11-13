@@ -20,7 +20,7 @@ SwiftUI component for **Apple Messages / iMessage-style bubble scrolling**, usin
 |---|---|
 | <img src="docs/media/scroll.gif" width="280" alt="Physical iPhone recording: fast flicks interrupted by touch, with bubble spacing settling afterwards"> | <img src="docs/media/keyboard.gif" width="280" alt="Physical iPhone recording: keyboard opening and dismissal coordinated with return to the latest message"> |
 
-Original-speed physical iPhone recording supplied by the project owner, showing the component example with local sample data. GIF previews loop at 50 fps. [Download the full silent recording (60 fps MP4)](https://raw.githubusercontent.com/Prinn-Liam/MessageMotion/main/docs/media/demo.mp4). These are not recordings of Apple Messages. [Capture details](docs/SHOWCASE.md#demo-provenance).
+Original-speed physical iPhone recording supplied by the project owner, showing the component example with local sample data. GIF previews loop at 50 fps. [Download the full silent recording (60 fps MP4)](https://raw.githubusercontent.com/Prinn-Liam/MessageMotion/main/docs/media/demo.mp4). The recordings predate the slow-drag refinement and current default tuning. These are not recordings of Apple Messages. [Capture details](docs/SHOWCASE.md#demo-provenance).
 
 ## Supported behavior
 
@@ -66,18 +66,20 @@ A complete runnable integration is in [DemoChatView.swift](Example/MessageMotion
 
 ## Implementation and defaults
 
-`MessageMotionLayout` uses `UIDynamicAnimator` with one `UIAttachmentBehavior` anchored at each bubble's resting center. Scroll displacement perturbs springs using a capped distance-from-touch weight. Minimum visible spacing is enforced separately; animated frames determine visible cells. There is no extra speed multiplier or custom spring solver.
+`MessageMotionLayout` uses `UIDynamicAnimator` with one `UIAttachmentBehavior` per bubble. Continuous dynamic items retain subpixel positions; layout attributes are display copies. Nonzero attachment lengths avoid the near-anchor instability observed with zero-length springs. Scroll displacement perturbs springs using a capped distance-from-touch weight. Minimum visible spacing is enforced separately; animated frames determine visible cells. There is no extra speed multiplier or custom spring solver.
 
 `keyboardLayoutGuide` controls keyboard geometry. A cancellable display link moves through actual intermediate rows toward the latest-message destination. Height-only viewport changes avoid collection-view layout transitions.
 
 | Setting | Default |
 |---|---:|
 | `frequency` | 4.5 Hz |
-| `damping` | 1.0 |
-| `dragStrength` | 0.65 |
+| `damping` | 0.7 |
+| `dragStrength` | 1.5 |
 | `normalGap` | 16 pt |
 | `minimumGapRatio` | 0.6 |
 | `deformsDuringDeceleration` | true |
+
+The initializer, `.messagesLike`, partial JSON decoding and example reset all use these defaults. To keep the earlier coefficients, explicitly set `damping: 1, dragStrength: 0.65`; the updated spring implementation still applies.
 
 See [implementation details](docs/IMPLEMENTATION.md), [中文实现文档](docs/IMPLEMENTATION.zh-Hans.md), [measurement method](docs/MEASUREMENT.md) and [source code](Sources/MessageMotion/MessageMotionLayout.swift).
 

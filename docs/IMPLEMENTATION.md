@@ -21,20 +21,20 @@ Only Apple frameworks are used. The independent example owns synthetic messages 
 
 ## Native spring input
 
-Keep resting attributes separate from the attributes used as UIKit dynamic items. Create a `UIDynamicAnimator(collectionViewLayout:)`; give every loaded row a `UIAttachmentBehavior` with its anchor at that row's resting center and length0.
+Keep resting geometry separate from continuous `UIDynamicItem` positions. Use a general `UIDynamicAnimator()`; layout attributes are display copies and never feed rounded positions back into the solver. Local probes found pixel quantization with layout attributes as physical items and near-anchor drift with zero-length attachments. Each attachment now has length `4 * max(contentHeight, viewportHeight, 1)`, with its anchor that distance above the resting center. Vertical extension still represents bubble displacement. The span is geometric, not an input threshold. The native action projects spacing and invalidates layout; natural animator pause restores exact resting centers.
 
-Starting preset:4.5Hz, damping1, strength0.65, normal gap16pt, minimum gap ratio0.6, momentum input enabled. The4.5Hz value is inferred from recording behavior, not an Apple-provided constant. UIKit's attachment API defines damping1 as critical damping.
+Starting preset:4.5Hz, damping0.7, strength1.5, normal gap16pt, minimum gap ratio0.6, momentum input enabled. The4.5Hz value is inferred from recording behavior, not an Apple-provided constant. UIKit's attachment API defines damping1 as critical damping.
 
 For each eligible vertical bounds change:
 
 ```text
 delta = proposedBounds.minY - currentBounds.minY
-weight = min(1, (abs(anchor.y-touch.y) + abs(anchor.x-touch.x)) / 1500)
+weight = min(1, (abs(restingCenter.y-touch.y) + abs(restingCenter.x-touch.x)) / 1500)
 animated.center.y += delta * weight * strength
 animator.updateItem(usingCurrentState: animated)
 ```
 
-This perturbs native positions and lets UIKit restore them. It does not replace the physics solver with a hand-written envelope or multiply excitation by an extra gesture-speed gain. At the same frame cadence, scroll displacement increases with speed; the complete response also depends on native integration, spring coefficients, refresh rate and row geometry.
+Distance weighting uses the resting center, not the displaced attachment anchor. This perturbs continuous native positions and lets UIKit restore them without a dead zone, jitter threshold or timed forced settle. It does not replace the physics solver with a hand-written envelope or multiply excitation by an extra gesture-speed gain. At the same frame cadence, scroll displacement increases with speed; the complete response also depends on native integration, spring coefficients, refresh rate and row geometry.
 
 During direct dragging use the native pan location in content coordinates. Save its viewport position. During native deceleration, convert that saved position using the current bounds origin on every input step. Enable this input only when the proposed offset is inside the legal scroll range. Edge rubber-band return is not an additional excitation source. Programmatic scroll, touch rebase and keyboard size changes must not inject.
 
@@ -56,7 +56,7 @@ Observe initial contact without consuming the native pan: no delay, no cancellat
 2. Find the visible animated row nearest the touch and compute its offset from the resting row.
 3. Request `contentOffset.y - lag`, clamped to legal bounds.
 4. Add the **actual** offset correction to all animated centers, and change contentOffset in the same nonanimated transaction. Every screen coordinate `center-offset` stays continuous.
-5. Recreate independent native attachments at resting anchors. The touched row becomes a resting reference when compensation is not clamped; surrounding gaps settle.
+5. Recreate independent native attachments using the same offset anchors and lengths. The touched row becomes a resting reference when compensation is not clamped; surrounding gaps settle.
 
 This adopted path clears prior native velocities at contact. Preserving velocity by replacing the mechanism would be a behavioral change, not cleanup. Exact pinning cannot be promised when a content boundary limits compensation. No separate near-to-far recovery wave is implemented.
 

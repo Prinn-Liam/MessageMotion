@@ -22,9 +22,9 @@
 
 ## 3. 每个气泡的原生弹簧
 
-每行保存两份几何：不参与动画的静止 frame，和参与 UIKit Dynamics 的 layout attributes。用 `UIDynamicAnimator(collectionViewLayout:)` 驱动原生 attachment，锚点永远是该行的静止中心。
+每行保存静止几何与独立 `UIDynamicItem` 的连续位置；layout attributes 仅作为显示副本，不能把取整后的位置送回物理求解器。使用通用 `UIDynamicAnimator()`。本地探针观察到 layout attributes 作为物理对象时的像素量化，以及零长度 attachment 在锚点附近的漂移。现将 attachment 长度设为 `4 * max(contentHeight, viewportHeight, 1)`，锚点放在静止中心上方同等距离。竖直伸长仍等于气泡偏移；这个跨度是几何设置，不是输入阈值。原生 action 约束间距并刷新布局，自然暂停时精确归位，不添加死区、抖动阈值或定时强制归位。
 
-起始设置：length0、frequency4.5Hz、damping1、形变强度0.65、正常间距16pt、最小间距比例0.6、惯性阶段继续输入开启、距离除数1500。4.5Hz 是根据录像观察拟合的起始参数，不是测到的 Apple 私有常数。
+起始设置：frequency4.5Hz、damping0.7、形变强度1.5、正常间距16pt、最小间距比例0.6、惯性阶段继续输入开启、距离除数1500。4.5Hz 是根据录像观察拟合的起始参数，不是测到的 Apple 私有常数。
 
 这个开源版本保留已认可的独立弹簧路径。屏幕锚定实验、按偏移调整阻尼和按间距调整频率不进入核心，以免把废弃试验和有效机制混在一起。
 
@@ -32,12 +32,12 @@
 
 ```text
 delta = newBounds.minY - oldBounds.minY
-weight = min(1, (abs(anchor.y-reference.y) + abs(anchor.x-reference.x)) / 1500)
+weight = min(1, (abs(restingCenter.y-reference.y) + abs(restingCenter.x-reference.x)) / 1500)
 animated.center.y += delta * weight * dragStrength
 animator.updateItem(usingCurrentState: animated)
 ```
 
-这是位置扰动，由原生弹簧随即恢复。没有按手势速度额外乘一个补偿系数。相同刷新条件下，每帧滚动距离随滚速增加，因此持续输入与滚速关联；实际结果还取决于原生积分器、刷新率、弹簧系数和行高，不能宣称一个对所有设备精确成立的解析比例。
+距离权重仍参考气泡静止中心，不使用移远后的 attachment 锚点。这是连续位置扰动，由原生弹簧随即恢复。没有按手势速度额外乘一个补偿系数。相同刷新条件下，每帧滚动距离随滚速增加，因此持续输入与滚速关联；实际结果还取决于原生积分器、刷新率、弹簧系数和行高，不能宣称一个对所有设备精确成立的解析比例。
 
 拖动时参考点取手指在 collectionView 内容坐标里的位置。松手后记住最后的视口触点，惯性阶段每帧加上当前 bounds.origin，转换为内容坐标。惯性阶段只有原生 isDecelerating 且 bounds 在合法范围内才输入，越过边缘的橡皮筋回弹不输入。
 
@@ -52,7 +52,7 @@ gap = next.frame.minY - previous.frame.maxY + normalGap
 minimumGap = normalGap * minimumGapRatio
 ```
 
-选择离参考触点最近的气泡作固定行，从它向下、向上投影：只把违反下限的行向外推，不移动固定行、不缩放气泡、不把全部间距改成常量。物理步中约束真实 attributes，并通知 animator；返回布局属性时再对副本投影作为渲染保护。比例只允许0到1。
+选择离参考触点最近的气泡作固定行，从它向下、向上投影：只把违反下限的行向外推，不移动固定行、不缩放气泡、不把全部间距改成常量。物理步中约束连续物理对象，并通知 animator；返回布局属性时再对副本投影作为渲染保护。比例只允许0到1。
 
 查询可见行必须按**动画中的 frame**与查询 rect 相交，而不能先按静止 frame 筛选。示例为所有已加载消息准备物理状态，仅创建当前需要的 cell。这保证进入视口的形变行可用，成本为 O(n) 状态/查询；它不是未经验证的海量聊天历史虚拟化方案。
 
@@ -64,7 +64,7 @@ minimumGap = normalGap * minimumGapRatio
 2. 找到离触点最近的动画行，计算它相对静止中心的 lag。
 3. 目标 contentOffset.y 为旧值减 lag，并钳制到合法内容范围。
 4. 实际补偿记为 correction；所有动画行中心同时加 correction，再设置新的 contentOffset。两个变化在同一个无动画事务完成，所以屏幕坐标 `center-offset` 连续。
-5. 用静止中心重新建立独立 attachments，让相对间距继续恢复。
+5. 根据静止中心及相同偏移锚点、长度重新建立独立 attachments，让相对间距继续恢复。
 
 此路径会重建 animator 并清除旧速度。这是已认可基准的行为，不能在“整理代码”时悄悄换成另一种触摸模型。内容边缘钳制时，不能承诺被点住行完全固定。
 
